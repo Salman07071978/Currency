@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # Currency rates as of a certain date
 exchange_rates = {
@@ -17,23 +18,47 @@ def currency_converter(amount, currency):
     else:
         return None
 
+# Plotting function for exchange rates
+def plot_exchange_rates():
+    currencies = list(exchange_rates.keys())
+    rates = list(exchange_rates.values())
+    
+    plt.figure(figsize=(6,4))
+    plt.bar(currencies, rates, color='teal')
+    plt.title('Exchange Rates (1 Unit to PKR)')
+    plt.xlabel('Currency')
+    plt.ylabel('Rate (PKR)')
+    st.pyplot(plt)
+
 # Streamlit app
 def main():
-    st.title("Currency Converter")
-    st.write("Convert foreign currencies to Pakistani Rupees (PKR).")
-    
+    # App title and description
+    st.title("💱 Interactive Currency Converter")
+    st.write("Convert foreign currencies to **Pakistani Rupees (PKR)** in real-time and visualize exchange rates.")
+
+    # Plot exchange rates for better visualization
+    st.subheader("Exchange Rates Overview")
+    plot_exchange_rates()
+
     # User inputs
+    st.subheader("Currency Conversion")
     currency = st.selectbox("Select the currency", options=list(exchange_rates.keys()))
-    amount = st.number_input(f"Enter the amount in {currency}", min_value=0.0, format="%.2f")
+    amount = st.number_input(f"Enter the amount in {currency}", min_value=0.0, format="%.2f", help="Amount of foreign currency to convert into PKR.")
     
-    # Convert and display result
-    if st.button("Convert"):
+    # Automatically update the conversion as the user types
+    if amount > 0:
         converted_amount = currency_converter(amount, currency)
-        
-        if converted_amount is not None:
-            st.success(f"{amount} {currency} is equal to {converted_amount:.2f} PKR.")
-        else:
-            st.error("Invalid currency code. Please try again.")
+        st.success(f"💵 **{amount} {currency}** is equal to **{converted_amount:.2f} PKR**.")
+    else:
+        st.info("Please enter an amount greater than 0.")
+
+    # Conversion Tips
+    st.sidebar.header("💡 Currency Conversion Tips")
+    st.sidebar.write("""
+    - Exchange rates fluctuate frequently.
+    - Always check for updated rates before making large conversions.
+    - You can use this tool to estimate conversions for small transactions.
+    """)
 
 # Run the app
 if __name__ == "__main__":
