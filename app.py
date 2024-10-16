@@ -1,71 +1,41 @@
 import streamlit as st
 
-# Exchange rates for 10 different currencies to PKR (hidden from user view)
-exchange_rates = {
-    "USD": 280.0,    # 1 USD to PKR
-    "EUR": 300.0,    # 1 EUR to PKR
-    "GBP": 350.0,    # 1 GBP to PKR
-    "INR": 3.5,      # 1 INR to PKR
-    "JPY": 2.0,      # 1 JPY to PKR
-    "CAD": 210.0,    # 1 CAD to PKR
-    "AUD": 190.0,    # 1 AUD to PKR
-    "CNY": 40.0,     # 1 CNY to PKR
-    "SAR": 75.0,     # 1 SAR to PKR
-    "AED": 76.0      # 1 AED to PKR
-}
+def calculate_tax(salary, tax_rate):
+    """Calculate tax based on salary and tax rate."""
+    tax = salary * (tax_rate / 100)
+    salary_after_tax = salary - tax
+    return tax, salary_after_tax
 
-# Currency converter function
-def currency_converter(amount, currency):
-    """Convert the given amount of foreign currency to PKR."""
-    if currency in exchange_rates:
-        pkr_value = amount * exchange_rates[currency]
-        return pkr_value
-    else:
-        return None
-
-# Streamlit app for currency conversion
+# Streamlit app to simulate a tax calculation program for an IT customer
 def main():
-    st.title("🌍 Interactive Currency Converter")
-    st.write("Easily convert your foreign currencies to Pakistani Rupees (PKR).")
+    st.title("💻 Tax Calculator Simulation")
+    st.write("""
+    This program simulates a scenario where an IT firm is tasked to create a C program that calculates 
+    the tax a user has to pay and their salary after tax deduction. 
+    We'll do this interactively in Python to demonstrate.
+    """)
 
-    # Adding a dynamic selection with emojis for an interactive experience
-    st.subheader("Select Your Currency and Enter the Amount")
+    # Step 1: Take the tax rate input
+    st.subheader("Step 1: Input Tax Rate")
+    tax_rate = st.number_input("Enter the tax rate (%)", min_value=0.0, max_value=100.0, value=10.0, step=0.1)
 
-    # Define currency choices with a friendly display
-    currency_dict = {
-        "🇺🇸 US Dollar (USD)": "USD",
-        "🇪🇺 Euro (EUR)": "EUR",
-        "🇬🇧 British Pound (GBP)": "GBP",
-        "🇮🇳 Indian Rupee (INR)": "INR",
-        "🇯🇵 Japanese Yen (JPY)": "JPY",
-        "🇨🇦 Canadian Dollar (CAD)": "CAD",
-        "🇦🇺 Australian Dollar (AUD)": "AUD",
-        "🇨🇳 Chinese Yuan (CNY)": "CNY",
-        "🇸🇦 Saudi Riyal (SAR)": "SAR",
-        "🇦🇪 UAE Dirham (AED)": "AED"
-    }
+    # Step 2: Take the salary input
+    st.subheader("Step 2: Input Salary")
+    salary = st.number_input("Enter the salary", min_value=0.0, value=50000.0, step=500.0)
 
-    # Selectbox to choose currency in a more user-friendly way
-    currency = st.selectbox("Select your currency:", list(currency_dict.keys()))
-    
-    # Convert the selected friendly name back to currency code
-    selected_currency = currency_dict[currency]
-    
-    # User inputs amount
-    amount = st.number_input(f"Enter the amount in {currency.split()[1]}:", min_value=0.0, format="%.2f")
-    
-    # Convert and display result
-    if st.button("Convert"):
-        converted_amount = currency_converter(amount, selected_currency)
+    # Step 3: Calculate tax and salary after tax
+    if st.button("Calculate Tax"):
+        tax, salary_after_tax = calculate_tax(salary, tax_rate)
         
-        if converted_amount is not None:
-            st.success(f"💸 {amount} {selected_currency} is equal to {converted_amount:.2f} PKR.")
-        else:
-            st.error("⚠️ Conversion failed. Please try again.")
+        # Display results
+        st.write(f"💵 **Tax to Pay**: {tax:.2f} PKR")
+        st.write(f"💰 **Salary after Tax**: {salary_after_tax:.2f} PKR")
 
-    # Add a fun message to encourage further interaction
-    st.write("💡 Curious to know more? Try converting amounts in different currencies!")
+        st.success("Tax calculation complete!")
 
-# Run the Streamlit app
+    # Add a final message to summarize the IT firm’s request fulfillment
+    st.subheader("Simulation Summary")
+    st.write("This interactive simulation fulfills the client's request for a C program that calculates tax and salary.")
+
 if __name__ == "__main__":
     main()
