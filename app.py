@@ -1,6 +1,3 @@
-import streamlit as st
-import matplotlib.pyplot as plt
-
 # Currency rates as of a certain date
 exchange_rates = {
     "USD": 280,    # 1 USD to PKR
