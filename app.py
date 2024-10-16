@@ -1,6 +1,3 @@
-pip install matplotlib
-pip install matplotlib==3.7.1
-
 import streamlit as st
 import matplotlib.pyplot as plt
 
